@@ -7,6 +7,8 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 // parse incoming JSON data
 app.use(express.json());
+// allows css and js when html is called
+app.use(express.static("public"));
 
 const { animals } = require("./data/animals.json");
 
@@ -98,6 +100,26 @@ app.post("/api/animals", (req, res) => {
         const animal = createNewAnimal(req.body, animals);
         res.json(animal);
     }
+});
+
+// GET route for homepage
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "./public/index.html"));
+});
+
+// GET route for animals page
+app.get("/animals", (req, res) => {
+    res.sendFile(path.join(__dirname, "./public/animals.html"));
+});
+
+// GET route for zookeepers page
+app.get("/zookeepers", (req, res) => {
+    res.sendFile(path.join(__dirname, "./public/zookeepers.html"));
+});
+
+// Wildcard route
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "./public/index.html"));
 });
 
 app.listen(PORT, () => {
